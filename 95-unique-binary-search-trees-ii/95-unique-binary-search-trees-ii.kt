@@ -9,10 +9,16 @@
  * }
  */
 class Solution {
+    private val memoization: MutableMap<Pair<Int, Int>, List<TreeNode?>> = mutableMapOf()
+    
     private fun generate(from: Int, to: Int): List<TreeNode?> {
         /// 트리를 만들 수 없는 경우, null로 반환한다.
         if (from > to) {
             return arrayListOf(null)
+        }
+
+        if (memoization.containsKey(Pair(from, to))) {
+            return memoization[Pair(from, to)]!!
         }
 
         val result = mutableListOf<TreeNode>()
@@ -34,6 +40,7 @@ class Solution {
                 }
             }
         }
+        memoization[Pair(from, to)] = result
         return result
     }
 
