@@ -1,48 +1,24 @@
 class Solution {
-    /**
-     *
-     *
-     * 02468
-     * 13579
-     *
-     * 3 * 4
-     * 10 -> 5
-     * 0 4 8
-     * 13579
-     * 2 6
-     *
-     * 4 * 3
-     * 10 -> 4
-     * 0  6
-     * 1 57
-     * 24 8
-     * 3  9
-     *
-     * 5 * 3
-     * 10 -> 4
-     * 0   8  (5-1) * 0 + 0                 (5-1) * 2 + 0                           (5-1) * 4 + 0
-     * 1  79  (5-1) * 0 + 1, (5-1) * 1 + 3, (5-1) * 2 + 1, (5-1) * 3 + 3 (1, n - 2)
-     * 2 6    (5-1) * 0 + 2, (5-1) * 1 + 2, (5-1) * 2 + 2, (5-1) * 3 + 2 (2)
-     * 35     (5-1) * 0 + 3, (5-1) * 1 + 1, (5-1) * 2 + 3, (5-1) * 3 + 1 (n - 2, 1)
-     * 4      (5-1) * 0 + 4,                (5-1) * 2 + 4
-     */
     fun convert(s: String, numRows: Int): String {
         if (numRows == 1) {
             return s
         }
 
+        /// 메트릭스를 초기화하고 지나가면서 값을 넣는다.
         val matrix = Array(numRows) { CharArray((s.length)) { '0' } }
+
+        /// 문자열을 큐형태로 만든다.
         val str: ArrayList<Char> = s.toCharArray().toCollection(ArrayList())
 
+        /// 지나가는 cursor
         var row = 0
         var col = 0
 
+        /// 방향 플래그
         var goingDown = true
 
-        // 6
-        // 5
-
         while (str.isNotEmpty()) {
+            /// 로우의 상태에 따라 방향 플래그를 갱신한다.
             if (row == numRows - 1) {
                 goingDown = false
             }
@@ -50,8 +26,10 @@ class Solution {
                 goingDown = true
             }
 
+            /// 매트릭스에 값을 넣는다.
             matrix[row][col] = str.removeAt(0)
 
+            /// 다음 위치로 이동
             if (goingDown) {
                 row += 1
             } else {
@@ -61,8 +39,8 @@ class Solution {
         }
 
         var result = ""
-        for (row in matrix) {
-            for (c in row) {
+        for (charArray in matrix) {
+            for (c in charArray) {
                 if (c != '0') {
                     result += c
                 }
