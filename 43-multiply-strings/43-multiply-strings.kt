@@ -21,12 +21,13 @@ class Solution {
     fun multiply(num1: String, num2: String): String {
         var leftCursor = num1.length - 1
         var base = 0
-        var tmp = "0"
+        var result = "0"
 
         while (leftCursor >= 0) {
-            var carry = 0
-            var result = ""
             var rightCursor = num2.length - 1
+            
+            var carry = 0
+            var tmpResult = ""
 
             while (rightCursor >= 0) {
                 val left = num1[leftCursor].toInt() - '0'.toInt()
@@ -35,20 +36,26 @@ class Solution {
                 val tmp = left * right + carry
                 carry = tmp / 10
 
-                result = "${tmp % 10}$result"
+                tmpResult = "${tmp % 10}$tmpResult"
 
                 rightCursor -= 1
             }
-            result = if (carry > 0 ) {
-                "$carry$result${(0 until base).map { '0' }.joinToString("")}"
+            
+            /// base에 따라 옆에 0을 붙여준다.
+            tmpResult = if (carry > 0 ) {
+                "$carry$tmpResult${(0 until base).map { '0' }.joinToString("")}"
             } else {
-                "$result${(0 until base).map { '0' }.joinToString("")}"
+                "$tmpResult${(0 until base).map { '0' }.joinToString("")}"
             }
-            tmp = add(tmp, result)
+            
+            /// 곱한 결과를 다 더한다.
+            result = add(result, tmpResult)
+            
             base += 1
             leftCursor -= 1
         }
 
-        return if (tmp.startsWith("0")) "0" else tmp
+        /// 엣지 케이스 "0000"같은 경우 "0"으로 반환한다.
+        return if (result.startsWith("0")) "0" else result
     }
 }
