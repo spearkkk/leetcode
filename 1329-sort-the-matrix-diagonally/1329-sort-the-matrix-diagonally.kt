@@ -8,26 +8,26 @@ class Solution {
                 break
             }
 
-            var tmpX = x
-            var tmpY = y
+            var leftRightCursor = x
+            var bottomTopCursor = y
 
-            val holder = mutableListOf<Int>()
+            val values = mutableListOf<Int>()
 
-            while (tmpX <= mat[0].size - 1 && tmpY <= mat.size - 1) {
-                holder.add(mat[tmpY][tmpX])
-                tmpX += 1
-                tmpY += 1
+            while (leftRightCursor <= mat[0].size - 1 && bottomTopCursor <= mat.size - 1) {
+                values.add(mat[bottomTopCursor][leftRightCursor])
+                leftRightCursor += 1
+                bottomTopCursor += 1
             }
 
-            val tmp22 = holder.sorted().toMutableList()
+            val sortedValues = values.sorted().toMutableList()
 
-            var tmpX2 = x
-            var tmpY2 = y
+            var leftRightCursor2nd = x
+            var bottomTopCursor2nd = y
 
-            while (tmpX2 <= mat[0].size - 1 && tmpY2 <= mat.size - 1) {
-                mat[tmpY2][tmpX2] = tmp22.removeAt(0)
-                tmpX2 += 1
-                tmpY2 += 1
+            while (leftRightCursor2nd <= mat[0].size - 1 && bottomTopCursor2nd <= mat.size - 1) {
+                mat[bottomTopCursor2nd][leftRightCursor2nd] = sortedValues.removeAt(0)
+                leftRightCursor2nd += 1
+                bottomTopCursor2nd += 1
             }
 
             if (y != 0) {
