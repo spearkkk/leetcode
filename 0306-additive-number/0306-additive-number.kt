@@ -1,37 +1,43 @@
 class Solution {
-    fun isAdditiveNumber(num: String): Boolean {
-    if (num.length < 3) return false
-
-    for (i in 0..num.length / 3) {
-        val first = num.substring(0, i + 1)
-        if (first[0] == '0' && first.length > 1) {
-            continue
+    private fun sum(left: Long, right: Long, current: String, target: String): Boolean {
+        if (current.length == target.length && current == target) {
+            return true
         }
-        for (j in i + 1..num.length - 1) {
-            val second = num.substring(i + 1, j + 1)
-            if (second[0] == '0' && second.length > 1) {
+
+        if (current.length > target.length || !target.startsWith(current)) {
+            return false
+        }
+
+        return sum(right, left + right, "$current$right", target)
+    }
+
+    fun isAdditiveNumber(num: String): Boolean {
+        if (num.length <= 2) {
+            return false
+        }
+        for (leftCursor in 1 .. num.length / 3 + 1) {
+            val left = num.substring(0 until leftCursor)
+            if (left.startsWith("0") && left.length != 1) {
                 continue
             }
-            if (valid(num.substring(j + 1),
-                first.toLong(), second.toLong())) {
-                return true
+
+            for (rightCursor in leftCursor + 1 ..  leftCursor + (num.length - leftCursor) / 2 + 1) {
+                val right = num.substring(leftCursor until rightCursor)
+
+                if (right.startsWith("0") && right.length != 1) {
+                    continue
+                }
+
+                if (left.length + right.length >= num.length) {
+                    return false
+                }
+
+                if (sum(left.toLong(), right.toLong(), left, num)) {
+                    return true
+                }
             }
         }
+
+        return false
     }
-    return false
-}
-
-private fun valid(num: String, first: Long, second: Long): Boolean {
-    val sum = first + second
-    val str = sum.toString()
-    val len = str.length
-
-    if (num.length < len) return false
-    if (num.length == len && num == str) return true
-    if (num.substring(0, len) == str) {
-        return valid(num.substring(len), second, sum)
-    }
-
-    return false
-}
 }
