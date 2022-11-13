@@ -33,8 +33,12 @@ class Solution {
             } else {
                 dp[index] = nums[cursor]
             }
+            
+            if (cnt >= 3) {
+                return true
+            }
         }
 
-        return cnt >= 3
+        return false
     }
 }
