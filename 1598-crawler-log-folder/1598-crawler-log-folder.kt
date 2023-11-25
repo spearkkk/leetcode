@@ -1,6 +1,6 @@
 class Solution {
     fun minOperations(logs: Array<String>): Int {
-        val stack: ArrayList<String> = arrayListOf()
+        var cnt = 0
 
         for (log in logs) {
             if (log == "./") {
@@ -8,15 +8,16 @@ class Solution {
             }
 
             if (log == "../") {
-                if(stack.size != 0) {
-                    stack.removeLast()
+                cnt--
+                if (cnt < 0) {
+                    cnt = 0
                 }
                 continue
             }
 
-            stack.add(log)
+            cnt++
         }
 
-        return stack.size
+        return cnt
     }
 }
