@@ -25,7 +25,6 @@ class Solution {
 
         fun bt(cur: DoubleArray): Boolean {
             if (cur.size == 1) {
-                println(cur[0])
                 if (kotlin.math.abs(cur[0] - 24.0) <= 0.1) {
                     return true
                 }
