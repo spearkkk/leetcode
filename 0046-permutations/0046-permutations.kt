@@ -4,7 +4,6 @@ class Solution {
         val answers = mutableListOf<List<Int>>()
 
         val answer = IntArray(nums.size)
-        val visited = BooleanArray(nums.size) { false }
 
         fun bt(cursor: Int) {
             if (cursor >= nums.size) {
@@ -13,18 +12,18 @@ class Solution {
             }
 
             for (i in nums.indices) {
-                if (visited[i]) {
+                if (nums[i] == Int.MIN_VALUE) {
                     continue
                 }
 
                 answer[cursor] = nums[i]
-                visited[i] = true
+                nums[i] = Int.MIN_VALUE
                 bt(cursor + 1)
 
-                visited[i] = false
+                nums[i] = answer[cursor]
             }
         }
-        
+
         bt(0)
 
         return answers
