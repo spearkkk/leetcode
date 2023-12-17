@@ -1,33 +1,41 @@
 class Solution {
-    private fun seek(board: Array<CharArray>, word: String, cursor: Int, current: Pair<Int, Int>): Boolean {
-        if (cursor >= word.length) {
-            return true
-        }
-        if (current.first < 0 || current.first >= board.size || current.second < 0 || current.second >= board[0].size) {
-            return false
-        }
-
-        if (board[current.first][current.second] != word[cursor]) {
-            return false
-        }
-
-        val stored = board[current.first][current.second]
-        board[current.first][current.second] = '*'
-
-        val result = seek(board, word, cursor + 1, Pair(current.first - 1, current.second))
-                || seek(board, word, cursor + 1, Pair(current.first, current.second - 1))
-                || seek(board, word, cursor + 1, Pair(current.first + 1, current.second))
-                || seek(board, word, cursor + 1, Pair(current.first, current.second + 1))
-
-        board[current.first][current.second] = stored
-
-        return result
-    }
-
     fun exist(board: Array<CharArray>, word: String): Boolean {
+        val n = board.size
+        val m = board[0].size
+
+        fun bt(cursor: Int, y: Int, x: Int): Boolean {
+            if (cursor >= word.length) {
+                return true
+            }
+
+            // 현재 좌표를 체크한다.
+            if (y < 0 || y >= n || x < 0 || x >= m) {
+                return false
+            }
+
+            if (board[y][x] != word[cursor]) {
+                return false
+            }
+
+            // 사용했는지 마킹을 다른 배열이 아니라 문자를 바꾸어서 마킹한다.
+            val tmp = board[y][x]
+            board[y][x] = '*'
+
+            val result = bt(cursor + 1, y + 1, x)
+                || bt(cursor + 1, y - 1, x)
+                || bt(cursor + 1, y, x + 1)
+                || bt(cursor + 1, y, x - 1)
+
+            board[y][x] = tmp
+
+            return result
+        }
+
+
+
         for (y in board.indices) {
             for (x in board[y].indices) {
-                if (seek(board, word, 0, Pair(y, x))) {
+                if (bt(0, y, x)) {
                     return true
                 }
             }
