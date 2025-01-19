@@ -1,0 +1,59 @@
+class TicTacToe(private final val n: Int) {
+  private final val board = Array(n) { IntArray(n) }
+
+  private fun check(y: Int, x: Int, player: Int): Int {
+    var flag = true
+    for (idx in 0 ..< n) {
+      if (board[y][idx] != player) {
+        flag = false
+        break
+      }
+    }
+    if (flag) {
+      return player
+    }
+    flag = true
+    for (idx in 0 ..< n) {
+      if (board[idx][x] != player) {
+        flag = false
+        break
+      }
+    }
+    if (flag) {
+      return player
+    }
+    flag = true
+    for (idx in 0 ..< n) {
+      if (board[idx][idx] != player) {
+        flag = false
+        break
+      }
+    }
+    if (flag) {
+      return player
+    }
+    flag = true
+    for (idx in 0 ..< n) {
+      if (board[idx][n - 1 - idx] != player) {
+        flag = false
+        break
+      }
+    }
+    if (flag) {
+      return player
+    }
+    return 0
+  }
+  
+  fun move(row: Int, col: Int, player: Int): Int {
+    board[col][row] = player
+    return check(col, row, player)
+  }
+
+}
+
+/**
+ * Your TicTacToe object will be instantiated and called as such:
+ * var obj = TicTacToe(n)
+ * var param_1 = obj.move(row,col,player)
+ */
