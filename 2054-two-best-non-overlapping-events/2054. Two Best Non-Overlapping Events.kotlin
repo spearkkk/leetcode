@@ -1,0 +1,53 @@
+class Solution {
+    // ref.) https://riveroverflow.tistory.com/entry/LeetCode-2054-Two-Best-Non-Overlapping-Events
+    // 이진 탐색 풀이법
+    //
+    // 문제를 보면 최대 2개 까지 선택할 수 있다. 이는 하나를 선택해도 괜찮다.
+    // 하나도 선택하지 않는 건 불가능.. 왜냐하면 최댓값을 구해야하니까.
+    // 이 이진 풀이가 말이 되는건,
+    // 일단 하나를 선택했을 때의 최댓값을 구해놓고 시작한다는 것이다.
+    // maxProfit[k]: 마지막부터 k번째까지 역순으로 가질 수 있는 최댓값으로 정의하면
+    // 0번째부터 k - 1번째까지 하나를 고르고, k번째부터 마지막까지 하나를 고르는 것임
+    // 여기서 시작 시각과 끝나는 시각을 고려해야 함.
+    fun maxTwoEvents(events: Array<IntArray>): Int {
+        val n = events.size
+
+        events.sortBy { it[0] }
+
+        // println(events.joinToString("\n") { it.joinToString(", ") })
+
+        val maxProfit = IntArray(n) { 0 }
+        maxProfit[n - 1] = events[n - 1][2]
+        for (k in n - 2 downTo 0) {
+            maxProfit[k] = kotlin.math.max(maxProfit[k + 1], events[k][2])
+        }
+
+        var answer = 0
+        for (k in 0..<n) {
+            // k번째 이벤트가 여태까지 구한 최댓값보다 큰 지 확인
+            answer = kotlin.math.max(answer, events[k][2])
+
+            // k번째 이벤트를 하나를 선택했다면
+            // k번째 이후의 최댓값 중 최댓값 하나 더 선택해서 최댓값을 구한다.
+            // 단, k번째 이벤트가 끝나는 시각이랑 하나 더 선택할 이벤트의 시작 시각이 겹치면 안된다.
+            var left = k + 1
+            var right = n - 1
+            var candidateIdx = -1
+            while (left <= right) {
+                val mid = (left + right) / 2
+                if (events[mid][0] > events[k][1]) {
+                    candidateIdx = mid
+                    right = mid - 1
+                } else {
+                    left = mid + 1
+                }
+            }
+
+            if (candidateIdx != -1) {
+                answer = kotlin.math.max(answer, events[k][2] + maxProfit[candidateIdx])
+            }
+        }
+
+        return answer
+    }
+}
