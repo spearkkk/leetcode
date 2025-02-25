@@ -1,0 +1,19 @@
+class Solution {
+    fun findTargetSumWays(nums: IntArray, target: Int): Int {
+        fun helper(target: Int, idx: Int): Int {
+            if (idx == 0) {
+                var cnt = 0
+                if (target == nums[0]) {
+                    cnt += 1
+                }
+                if (target == -nums[0]) {
+                    cnt += 1
+                }
+                return cnt
+            }
+            return helper(target - nums[idx], idx - 1) + helper(target + nums[idx], idx - 1)
+        }
+
+        return helper(target, nums.size - 1)
+    }
+}
