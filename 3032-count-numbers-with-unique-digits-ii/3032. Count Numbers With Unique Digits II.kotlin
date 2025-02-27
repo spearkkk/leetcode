@@ -1,0 +1,39 @@
+class Solution {
+    fun numberCount(a: Int, b: Int): Int {
+
+        val mark = BooleanArray(10) { false}
+
+        fun count(candidate: Int, min: Int, max: Int): Int {
+            var count = 0
+
+            if (candidate > max) {
+                return 0
+            }
+
+            if (candidate <= max && candidate >= min) {
+                count += 1
+            }
+
+            for (cursor in 0..9) {
+                if (mark[cursor]) {
+                    continue
+                }
+                
+                mark[cursor] = true
+                count += count(candidate * 10 + cursor, min, max)
+                mark[cursor] = false
+            }
+            return count
+        }
+
+        var count = 0
+
+        for (cursor in 1..9) {
+            mark[cursor] = true
+            count += count(cursor, a, b)
+            mark[cursor] = false
+        }
+        
+        return count
+    }
+}
