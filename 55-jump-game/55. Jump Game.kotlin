@@ -1,34 +1,38 @@
 class Solution {
-    private fun isDone(cur: Int, nums: IntArray): Boolean {
-        return cur + nums[cur] >= nums.size - 1
-    }
+    fun canJump(nums: IntArray): Boolean {
+        // k 번째 인덱스를 이미 검증 했다면 다시 한번 검증할 필요가 없으므로
+        // 검증을 했다는 것을 마킹한다.
+        val marked = IntArray(nums.size) { 0 }
 
-    private fun trying(cur: Int, nums: IntArray, marked: IntArray): Boolean {
-        /// 이미 와본 곳인데 또 들어왔다면 끝을 도달할 수 없다.
-        if (marked[cur] == 1) {
+        fun canPass(index: Int): Boolean {
+            // index 위치에서 nums[index] 만큼 점프할 수 있다.
+            // 점프할 결과가 끝보다 크거나 같다면 끝에 도달할 수 있다.
+            return index + nums[index] >= nums.size - 1
+        }
+
+        fun trying(index: Int): Boolean {
+            if (marked[index] == 1) {
+                // 점프로 끝에 도달했으면 이미 true로 끝나서 종료가 되었어야 함.
+                // 그런데 마킹한 곳에 다시 도착했다는 것은 점프로 못간다는 뜻.
+                return false
+            }
+
+            if (canPass(index)) {
+                // 점프로 끝에 도달하면 바로 끝을 낸다.
+                return true
+            }
+
+            marked[index] = 1
+
+            // 도달하지 못했으니 1부터 nums[index] 크기만큼 점프해보자
+            for (k in 1 .. nums[index]) {
+                if (trying(index + k)) {
+                    return true
+                }
+            }
             return false
         }
 
-        /// 끝까지 갈 수 있으면 반환한다.
-        if (isDone(cur, nums)) {
-            return true
-        }
-
-        /// 이미 와본 곳을 체크한다.
-        marked[cur] = 1
-
-        /// 점프할 수 있는 거리만큼 다 점프해본다.
-        for (i in 0 until nums[cur]) {
-            if (trying(cur + i + 1, nums, marked)) {
-                return true
-            }
-        }
-        return false
-    }
-
-    fun canJump(nums: IntArray): Boolean {
-        val marked = IntArray(nums.size) { 0 }
-
-        return trying(0, nums, marked)
+        return trying(0)
     }
 }
