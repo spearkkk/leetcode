@@ -1,0 +1,23 @@
+class Solution {
+    fun canReach(arr: IntArray, start: Int): Boolean {
+        val visited = BooleanArray(arr.size)
+        fun dfs(index: Int): Boolean {
+            if (index < 0 || index >= arr.size) {
+                return false
+            }
+            
+            if (arr[index] == 0) {
+                return true
+            }
+            
+            if (visited[index]) {
+                return false
+            }
+            visited[index] = true
+            
+            return dfs(index + arr[index]) || dfs(index - arr[index])
+        }
+
+        return dfs(start)
+    }
+}
