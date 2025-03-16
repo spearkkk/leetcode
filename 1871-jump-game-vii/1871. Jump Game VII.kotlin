@@ -1,0 +1,42 @@
+class Solution {
+    fun canReach(s: String, minJump: Int, maxJump: Int): Boolean {
+        /**
+         * 인덱스 k에서 도달할 수 있는 인덱스들은 [k + minJump, k + maxJump]이다. 단, 인덱스들의 값은 s.length보다 작아야 한다.
+         * 루프를 돌면서 인덱스 K에서 도달할 수 있는 인덱스들을 찾아낸다.
+         * 만약 마지막 인덱스에 도달하면 true, 아니면 찾았던 인덱스들을 다시 검사한다.
+         *
+         * -> 메로리 초과로 통과할 수 없다.
+         *
+         * ---
+         *
+         * https://leetcode.com/problems/jump-game-vii/solutions/1224804/javacpython-one-pass-dp-by-lee215-6ptr
+         *
+         * 이 풀이법을 보면, s[k]로 점프할 수 있다면 dp[k] = true
+         * pre 변수는 현재 진행하고 있는 인덱스에 도달할 수 있는 이전 인덱스들의 수
+         *
+         */
+
+        val dp = BooleanArray(s.length)
+        dp[0] = true // s[0]에서 시작하므로 항상 도달할 수 있다.
+
+        var pre = 0 // 0번째에 도달하기까지의 이전 인덱스들의 수는 0이다.
+
+        for (k in 1..<s.length) {
+            // k - minJump 인덱스에서 minJump만큼 점프해서 k에 도달할 수 있다.
+            // 그리고 dp[k - minJump]가 trye이어야만 점프할 수 있다.
+            // k 인덱스 위치에서 도달할 수 있는 이전 인덱스들의 수를 증가시킨다.
+            if (k >= minJump && dp[k - minJump]) {
+                pre++
+            }
+
+            // k 인덱스 위치에서 도달할 수 있는 이전 인덱스들의 수를 감소시킨다.
+            // 다만, dp[k - maxJump - 1]이 true일 때만 감소시킨다. (k - maxJump 인덱스에서 maxJump만큼 점프해서 k에 도달할 수 있다.)
+            if (k > maxJump && dp[k - maxJump - 1]) {
+                pre--
+            }
+            dp[k] = pre > 0 && s[k] == '0'
+        }
+
+        return dp[s.length - 1]
+    }
+}
