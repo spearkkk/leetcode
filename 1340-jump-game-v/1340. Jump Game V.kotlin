@@ -1,0 +1,50 @@
+class Solution {
+    /**
+     * i에서 [i - d, i + d] 범위로 점프할 수 있다. 단, arr 배열 안에서만 점프가 가능하다.
+     * 그리고 점프는 반드시 높이가 더 낮은 쪽으로만 가능하다. 같아도 점프할 수 없다.
+     * 시작 지점은 어느 지점이어도 상관없지만, 최대로 점프할 수 있는 횟수를 찾아야한다.
+     *
+     * ---
+     * dp[k] = k에서 점프할 수 있는 최대 횟수
+     * dp[k] = max(dp[i]) + 1, i는 k에서 점프할 수 있는 모든 지점
+     */
+    fun maxJumps(arr: IntArray, d: Int): Int {
+
+        val dp = IntArray(arr.size) { 0 }
+
+        fun doJumping(k: Int): Int {
+            if (dp[k] != 0) {
+                return dp[k]
+            }
+
+            var max = 0
+            for (i in 1 .. d) {
+                if (k - i >= 0) {
+                    if (arr[k] > arr[k - i])  {
+                        max = kotlin.math.max(max, doJumping(k - i))
+                    } else {
+                        break
+                    }
+                }
+            }
+            for (i in 1 .. d) {
+                if (k + i < arr.size) {
+                    if (arr[k] > arr[k + i]) {
+                        max = kotlin.math.max(max, doJumping(k + i))
+                    } else{
+                        break
+                    }
+                }
+            }
+            dp[k] = max + 1
+            return dp[k]
+        }
+
+        for (i in arr.indices) {
+            doJumping(i)
+        }
+        // println(dp.joinToString(", "))
+
+        return dp.max()!!
+    }
+}
