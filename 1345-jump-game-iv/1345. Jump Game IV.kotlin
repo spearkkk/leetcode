@@ -1,0 +1,54 @@
+class Solution {
+    /**
+     * i에서 점프할 수 있는 곳은 i - 1, i + 1, 그리고 arr[i]와 같은 값을 가진 모든 인덱스들이다.
+     * 다만, arr의 범위를 벗어날 수는 없다.
+     *
+     * 여기서 arr.length - 1, 마지막까지 도달할 수 있는 최소 점프 수를 구해야한다.
+     */
+    fun minJumps(arr: IntArray): Int {
+        var count = 0
+        val holder = mutableListOf(0)
+        val anotherHolder = mutableListOf<Int>()
+
+        val visited = BooleanArray(arr.size)
+        val valueToIndices = mutableMapOf<Int, MutableSet<Int>>()
+
+        for (i in arr.indices)  {
+            valueToIndices.computeIfAbsent(arr[i]) { mutableSetOf() }.add(i)
+        }
+
+        while (true) {
+            if (holder.isEmpty()) {
+                if (anotherHolder.isNotEmpty())  {
+                    holder.addAll(anotherHolder)
+                    anotherHolder.clear()
+                    count += 1
+                    continue
+                } else {
+                    break
+                }
+            }
+
+            val current = holder.removeFirst()
+
+            if (current == arr.size - 1) {
+                return count
+            }
+            visited[current] = true
+
+            if (current - 1 >= 0 && !visited[current - 1]) {
+                anotherHolder.add(current - 1)
+            }
+            if (current + 1 < arr.size && !visited[current + 1]) {
+                anotherHolder.add(current + 1)
+            }
+
+            if (valueToIndices.contains(arr[current])) {
+                anotherHolder.addAll(valueToIndices[arr[current]]!!)
+                valueToIndices.remove(arr[current])
+            }
+        }
+
+        return -1
+    }
+}
