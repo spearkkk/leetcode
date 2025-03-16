@@ -1,4 +1,10 @@
 class Solution {
+    /**
+     * 이 문제는 start 지점에서 0의 값을 가진 어느 한곳이라도 갈 수 있다면
+     * true 를 반환하면 된다.
+     * 0번째 인덱스에 도착하는 것이 아니라 0의 값을 가진 인덱스다.
+     */
+
     fun canReach(arr: IntArray, start: Int): Boolean {
         val visited = BooleanArray(arr.size)
         fun dfs(index: Int): Boolean {
@@ -6,10 +12,13 @@ class Solution {
                 return false
             }
             
+            // 0의 값을 가진 인덱스에 도착하면 바로 끝
             if (arr[index] == 0) {
                 return true
             }
             
+            // 이미 방문했는데 true 로 끝나지 않았다는 것은
+            // 해당 인덱스에서는 0의 값을 가진 인덱스를 도착할 수 없다는 것
             if (visited[index]) {
                 return false
             }
