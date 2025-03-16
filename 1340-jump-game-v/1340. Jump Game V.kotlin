@@ -23,6 +23,7 @@ class Solution {
                     if (arr[k] > arr[k - i])  {
                         max = kotlin.math.max(max, doJumping(k - i))
                     } else {
+                        // 더 큰 벽을 만나서 점프가 불가능하다.
                         break
                     }
                 }
@@ -31,7 +32,8 @@ class Solution {
                 if (k + i < arr.size) {
                     if (arr[k] > arr[k + i]) {
                         max = kotlin.math.max(max, doJumping(k + i))
-                    } else{
+                    } else {
+                        // 더 큰 벽을 만나서 점프가 불가능하다.
                         break
                     }
                 }
@@ -43,7 +45,7 @@ class Solution {
         for (i in arr.indices) {
             doJumping(i)
         }
-        // println(dp.joinToString(", "))
+//        println(dp.joinToString(", "))
 
         return dp.max()!!
     }
