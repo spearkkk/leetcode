@@ -7,6 +7,13 @@ class Solution {
         val dp = IntArray(nums.size) { -10_000 * 100_000 - 1}
         dp[nums.size - 1] = nums.last()
 
+        // nums.size 만큼 반복하지만, i 위치에서 k 만큼 반복하면 시간 복잡도가 n^2이다.
+        // 단순히 nums.size == k 라고 생각해보면 시간초과로 문제를 풀 수 없다.
+        // 다만, i 위치에서 필요한건 i에서 도달할 수 있는 값들 중 가장 큰 값이다.
+        // 따라서 가장 큰 값만 생각하자.
+        // 가장 큰 값만 생각하기 때문에 반복문을 진행하면서 이전에 넣었던 값은 신경꺼도 좋다
+        // 그러나 이전에 넣었던 값이 가장 큰값이 될 때, 
+        // 그 값이 현재 위치 i에서 도달할 수 있는 거리인지 확인하자.
         val maxHeap = java.util.PriorityQueue<Pair<Int, Int>>(compareBy { -it.first })
 
         for (i in nums.size - 2 downTo 0) {
