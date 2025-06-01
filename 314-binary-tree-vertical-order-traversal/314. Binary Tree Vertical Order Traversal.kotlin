@@ -1,0 +1,31 @@
+class Solution {
+    fun verticalOrder(root: TreeNode?): List<List<Int>> {
+
+        fun helper(cur: TreeNode?, key: Int, depth: Int, holder: java.util.TreeMap<Int, java.util.TreeMap<Int, ArrayList<Int>>>) {
+            if (cur == null) {
+                return
+            }
+
+            val depthToValue = holder.getOrDefault(key, java.util.TreeMap<Int, ArrayList<Int>>())
+            val list = depthToValue.getOrDefault(depth, ArrayList())
+            list.add(cur.`val`)
+            depthToValue[depth] = list
+            holder[key] = depthToValue
+
+            if (cur.left != null) {
+                helper(cur.left!!, key - 1, depth + 1, holder)
+            }
+            if (cur.right != null) {
+                helper(cur.right!!, key + 1, depth + 1, holder)
+            }
+        }
+        val holder: java.util.TreeMap<Int, java.util.TreeMap<Int, ArrayList<Int>>> = java.util.TreeMap()
+        helper(root, 0, 0, holder)
+
+        val answer = ArrayList<ArrayList<Int>>()
+        holder.values.forEach { value ->
+            answer.add(value.values.flatten().toCollection(ArrayList()))
+        }
+        return answer
+    }
+}
