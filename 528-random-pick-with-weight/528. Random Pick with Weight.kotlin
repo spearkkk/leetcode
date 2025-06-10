@@ -1,0 +1,17 @@
+class Solution(w: IntArray) {
+    val rand  = java.util.Random()
+    val tree = java.util.TreeMap<Int, Int>()
+    var sum = 0
+
+    init {
+        for(i in 0..w.size-1) {
+            tree.put(sum,i)
+            sum += w[i]
+        }
+    }
+
+    fun pickIndex(): Int {
+        val r = rand.nextInt(sum)
+        return tree.floorEntry(r).value!!
+    }
+}
